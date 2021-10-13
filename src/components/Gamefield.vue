@@ -36,7 +36,7 @@ export default {
   methods: {
     async playRound() {
       for (var t = 50; t != 0; t--) {
-        let timeOut = t * 3;
+        let timeOut = -t + 30 * 3;
         await this.sleep(timeOut).then(() => this.rollNumber());
       }
       EventBus.emit("rollFinished", this.rollResult);

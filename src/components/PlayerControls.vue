@@ -18,7 +18,12 @@
       <button class="btn btn-success m-3">GO!</button>
     </div>
     <div class="col-12 col-sm-12 col-lg-12">
-      <button class="btn btn-success numZeroBtn mx-auto mb-3">0</button>
+      <button
+        class="btn btn-success numZeroBtn mx-auto mb-3"
+        @click="betOnZero()"
+      >
+        0
+      </button>
       <div
         v-for="(row, index) in gridData"
         :key="index"
@@ -71,13 +76,13 @@
       </div>
       <div class="col-12 mt-3 mx-auto row">
         <div class="col-12">
-          <button class="btn btn-light colorBtn m-3" @click="betOnOtt(0)">
+          <button class="btn btn-light colorBtn m-3" @click="betOnThird(0)">
             1-12
           </button>
-          <button class="btn btn-light colorBtn m-3" @click="betOnOtt(1)">
+          <button class="btn btn-light colorBtn m-3" @click="betOnThird(1)">
             12-24
           </button>
-          <button class="btn btn-light colorBtn m-3" @click="betOnOtt(2)">
+          <button class="btn btn-light colorBtn m-3" @click="betOnThird(2)">
             24-36
           </button>
         </div>
@@ -96,7 +101,7 @@
           </button>
           <button
             class="btn btn-light colorBtn m-3"
-            @click="betOnOddEven('even')"
+            @click="betOnOddEven('odd')"
           >
             Even
           </button>
@@ -154,16 +159,82 @@ export default {
     betOnColor(color) {
       this.betData = new gridProp("color", [], color);
     },
+    betOnOddEven(type) {
+      if (type == "odd") {
+        this.betData = new gridProp("color", [], "none");
+      } else {
+        this.betData = new gridProp("color", [], "none");
+      }
+    },
+    betOnThird(num) {
+      if (num == 0) {
+        let nums = Array.from(new Array(12), (x, i) => i + 1);
+        this.betData = new gridProp("third_a", nums, "green");
+      } else if (num == 1) {
+        let nums = Array.from(new Array(12), (x, i) => i + 13);
+        this.betData = new gridProp("third_a", nums, "green");
+      } else {
+        let nums = Array.from(new Array(12), (x, i) => i + 25);
+        this.betData = new gridProp("third_a", nums, "green");
+      }
+    },
   },
   computed: {
     currentBet() {
-      if (this.betData?.type == "number") {
-        return this.betData.numbers;
-      } else if (this.betData?.type == "color") {
-        return this.betData.color;
-      } else {
-        return "...";
+      var betType = this.betData?.type;
+      var result;
+      switch (betType) {
+        case "number":
+          result = this.betData.numbers;
+          break;
+        case "corner":
+          result = this.betData.numbers;
+          break;
+        case "split":
+          result = this.betData.numbers;
+          break;
+        case "street":
+          result = this.betData.numbers;
+          break;
+        case "color":
+          result = this.betData.color;
+          break;
+        case "odd":
+          result = this.betData.type;
+          break;
+        case "even":
+          result = this.betData.type;
+          break;
+        case "half_a":
+          result = this.betData.numbers;
+          break;
+        case "half_b":
+          result = this.betData.numbers;
+          break;
+        case "third_a":
+          result = this.betData.numbers;
+          break;
+        case "third_b":
+          result = this.betData.numbers;
+          break;
+        case "third_c":
+          result = this.betData.numbers;
+          break;
+        case "col_a":
+          result = this.betData.numbers;
+          break;
+        case "col_b":
+          result = this.betData.numbers;
+          break;
+        case "col_c":
+          result = this.betData.numbers;
+          break;
+        default:
+          result = "...";
+          break;
       }
+
+      return result;
     },
   },
 };

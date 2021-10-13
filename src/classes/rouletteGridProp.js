@@ -18,7 +18,7 @@ export default class gridProp {
 
   checkType() {
     let possibleTypes = [
-      "straightUp",
+      "number",
       "even",
       "odd",
       "half_a",

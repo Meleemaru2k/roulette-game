@@ -3,8 +3,15 @@ import gridProp from "../classes/rouletteGridProp";
 //TODO: Make Singleton
 export default class grid {
   constructor() {
-    this.numbersRed = this.setRedNumbers();
     this.grindPropTemplate = new gridProp("number", [1], "black");
+    this.simpleGrid;
+    this.subsets = {
+      oddEven: [],
+      columns: [],
+      thirds: [],
+      halfs: [],
+      redBlack: [],
+    };
     this.gridData = this.setupGrid();
   }
   get grid() {
@@ -12,8 +19,13 @@ export default class grid {
   }
 
   setupGrid() {
-    var simpleGrid = this.createNumberGrid();
-    var grid = this.extendNumberGrid(simpleGrid);
+    //Create a simple grid, extract subsets, create an advanced Roulette-Type-Grid
+    this.simpleGrid = this.createNumberGrid();
+
+    this.subsets.redBlack = this.getRedAndBlackNumbers();
+    this.subsets.oddEven = this.getOddEvenNumbers();
+
+    var grid = this.extendNumberGrid(this.simpleGrid);
     //grid = this.transpose2D(grid);
     return grid;
   }
@@ -24,13 +36,13 @@ export default class grid {
       complexGrid[iRow] = [];
       for (let i = 0; i < simpleGrid[iRow].length; i++) {
         let num = simpleGrid[iRow][i];
-        let color = this.numbersRed.includes(num) ? "red" : "black";
+        let color = this.subsets.redBlack[0].includes(num) ? "red" : "black";
 
         let cornerNumbers = this.getCornerNumbers(i, simpleGrid, iRow);
         let splitNumbers = this.getSplitNumbers(i, simpleGrid, iRow);
         let streetNumbers = this.getStreetNumbers(simpleGrid, iRow);
 
-        let top_left = new gridProp("corner", cornerNumbers, "none");
+        let top_left = new gridProp("corner", cornerNumbers[0], "none");
         let top = new gridProp("split", splitNumbers, "none");
         let cen_left = new gridProp("street", streetNumbers, "none");
         let cen = new gridProp("number", [num], color);
@@ -66,17 +78,18 @@ export default class grid {
   getCornerNumbers(numIndex, simpleGrid, row) {
     //top left corner only
     let corners = [];
-    //bot right, bot left, top left, top right
+    //bot right, bot left, top left, top right numbers
     let cornerValues = [];
+
     cornerValues.push(simpleGrid[row] ? simpleGrid[row][numIndex] : undefined);
     cornerValues.push(simpleGrid[row] ? simpleGrid[row][numIndex - 1] : undefined);
     cornerValues.push(simpleGrid[row - 1] ? simpleGrid[row - 1][numIndex - 1] : undefined);
     cornerValues.push(simpleGrid[row - 1] ? simpleGrid[row - 1][numIndex] : undefined);
+
     cornerValues = cornerValues.filter((x) => x != undefined);
     corners.push(cornerValues);
-    return corners;
 
-    //console.log(bot_r, bot_l, top_r, top_l);
+    return corners;
   }
 
   createNumberGrid() {
@@ -103,13 +116,20 @@ export default class grid {
     return matrix[0].map((col, i) => matrix.map((row) => row[i]));
   }
 
-  setRedNumbers() {
-    return [32, 19, 21, 25, 34, 27, 36, 30, 23, 5, 16, 1, 14, 9, 18, 7, 12, 3];
+  getRedAndBlackNumbers() {
+    let red = [32, 19, 21, 25, 34, 27, 36, 30, 23, 5, 16, 1, 14, 9, 18, 7, 12, 3];
+    let black = this.simpleGrid.flat().filter((x) => !red.includes(x));
+    return [red, black];
   }
 
+  getOddEvenNumbers() {
+    let odd = this.simpleGrid.flat().filter((x) => x % 2 != 0);
+    let even = this.simpleGrid.flat().filter((x) => x % 2 == 0);
+    return [odd, even];
+  }
   //Could be static
   isNumberRed(num) {
-    if (this.numbersRed.includes(num)) {
+    if (this.subsets.redBlack[0].includes(num)) {
       return true;
     } else {
       return false;
