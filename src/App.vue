@@ -9,7 +9,7 @@
         <Gamefield :number-min-max="numberMinMax" />
       </div>
       <div class="bg-dark col-12 col-lg-12 p-3 rounded row mx-0">
-        <PlayerControls :number-grid="gamefieldGrid.grid" />
+        <PlayerControls :number-grid="gamefieldGrid" />
       </div>
     </div>
   </div>
@@ -19,7 +19,7 @@
 import Scoreboard from "./components/Scoreboard.vue";
 import Gamefield from "./components/Gamefield.vue";
 import PlayerControls from "./components/PlayerControls.vue";
-import { toRaw } from "vue";
+//import { toRaw } from "vue";
 import gameGrid from "./classes/rouletteGrid";
 
 export default {
@@ -38,7 +38,6 @@ export default {
   },
   mounted() {
     this.setBetWinPayouts();
-    console.log(toRaw(this.numberGrid));
   },
   methods: {
     setHighscore(amountWon) {

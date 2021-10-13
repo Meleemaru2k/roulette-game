@@ -15,6 +15,7 @@ export default class gridProp {
     this.numbers = numbers;
     this.color = color; //red green white none
   }
+
   checkType() {
     let possibleTypes = [
       "straightUp",

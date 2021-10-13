@@ -4,7 +4,7 @@ import gridProp from "../classes/rouletteGridProp";
 export default class grid {
   constructor() {
     this.numbersRed = this.setRedNumbers();
-    this.x = new gridProp("number", [1], "black");
+    this.grindPropTemplate = new gridProp("number", [1], "black");
     this.gridData = this.setupGrid();
   }
   get grid() {
@@ -12,8 +12,9 @@ export default class grid {
   }
 
   setupGrid() {
-    var grid = this.extendNumberGrid(this.createNumberGrid());
-    grid = this.transpose2D(grid);
+    var simpleGrid = this.createNumberGrid();
+    var grid = this.extendNumberGrid(simpleGrid);
+    //grid = this.transpose2D(grid);
     return grid;
   }
 
@@ -24,7 +25,8 @@ export default class grid {
       for (let i = 0; i < simpleGrid[iRow].length; i++) {
         let num = simpleGrid[iRow][i];
         let color = this.numbersRed.includes(num) ? "red" : "black";
-
+        let cornerNumbers = this.getCornerNumbers(i, simpleGrid, iRow);
+        console.log(cornerNumbers);
         let top_left = new gridProp("corner", [], "none");
         let top = new gridProp("split", [], "none");
         let top_right = new gridProp("corner", [], "none");
@@ -44,7 +46,30 @@ export default class grid {
       }
     }
     console.log(complexGrid);
-    return simpleGrid;
+    return complexGrid;
+  }
+
+  getSplitNumbers(numIndex, simpleGrid, row){
+    simpleGrid[row] ? simpleGrid[row][numIndex]
+  }
+
+  getCornerNumbers(numIndex, simpleGrid, row) {
+    //top left corner as starting point, clockwise rotation
+    var corners = [];
+    for (let cornerIndex = 0; cornerIndex < 4; cornerIndex++) {
+      //bot right, bot left, top left, top right
+      let cornerValues = [];
+      cornerValues.push(simpleGrid[row] ? simpleGrid[row][numIndex] : undefined);
+      cornerValues.push(simpleGrid[row] ? simpleGrid[row][numIndex - 1] : undefined);
+      cornerValues.push(simpleGrid[row - 1] ? simpleGrid[row - 1][numIndex - 1] : undefined);
+      cornerValues.push(simpleGrid[row - 1] ? simpleGrid[row - 1][numIndex] : undefined);
+
+      console.log(cornerValues);
+      corners.push(cornerValues);
+    }
+    return corners;
+
+    //console.log(bot_r, bot_l, top_r, top_l);
   }
 
   createNumberGrid() {
@@ -76,7 +101,9 @@ export default class grid {
   }
   isNumberRed(num) {
     if (this.numbersRed.includes(num)) {
-      return;
+      return true;
+    } else {
+      return false;
     }
   }
 }
