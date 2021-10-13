@@ -13,6 +13,7 @@ export default class grid {
       streets: [],
       doubleStreets: [],
       redBlack: [],
+      basket: [0, 1, 2, 3],
     };
     //TODO: Use this in PlayerControls
     this.subsetProps = {
@@ -208,6 +209,7 @@ export default class grid {
 
     return [h1, h2];
   }
+
   //Could be static
   isNumberRed(num) {
     if (this.subsets.redBlack[0].includes(num)) {

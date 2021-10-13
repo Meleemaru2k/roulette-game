@@ -35,6 +35,14 @@
         >
           0
         </button>
+        <button
+          class="btn btn-secondary numZeroBtn border border-light mx-auto mb-3"
+          @click="betOnBasket()"
+          :disabled="isRolling"
+          style="width: 80%"
+        >
+          🧺
+        </button>
         <div
           v-for="(row, index) in gridData"
           :key="index"
@@ -319,6 +327,11 @@ export default {
       }
       this.scrollToElement(document.getElementById("startRoundBtn"), 300);
     },
+    betOnBasket() {
+      let nums = this.numberGrid.subsets.basket;
+      this.betData = new gridProp("basket", nums, "none");
+      this.scrollToElement(document.getElementById("startRoundBtn"), 300);
+    },
     //TODO: Make global
     scrollToElement: (element, offset = 0) => {
       let elemScrollY = element.getBoundingClientRect().top;
@@ -380,6 +393,9 @@ export default {
           result = this.betData.numbers;
           break;
         case "col_c":
+          result = this.betData.numbers;
+          break;
+        case "basket":
           result = this.betData.numbers;
           break;
         default:

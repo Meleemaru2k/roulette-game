@@ -8,7 +8,8 @@
     </button>
     <p class="m-1 text">
       Last Bet: T: {{ lastBet.type }} | N: {{ lastBet.numbers }} | C:
-      {{ lastBet.color }} | W: {{ lastBetWin }}
+      {{ lastBet.color }} | W: {{ lastBetWin }} | $-B:{{ lastBetAmount }} |
+      $-W:{{ lastBetWinAmount }}
     </p>
   </div>
 </template>
@@ -23,6 +24,8 @@ export default {
     numberRange: Array,
     lastBet: Object,
     lastBetWin: Boolean,
+    lastBetWinAmount: Number,
+    lastBetAmount: Number,
   },
   data() {
     return {

@@ -10,6 +10,8 @@
         <Gamefield
           :last-bet="playerStats.lastBet"
           :last-bet-win="playerStats.lastWin"
+          :last-bet-win-amount="playerStats.lastWinAmount"
+          :last-bet-amount="playerStats.lastBetAmount"
         />
       </div>
       <div class="bg-dark col-12 col-lg-12 p-3 rounded row mx-auto">
@@ -47,6 +49,8 @@ export default {
         money: 1000,
         lastBet: new gridProp("none", [], "none"),
         lastWin: false,
+        lastWinAmount: 0,
+        lastBetAmount: 0,
       },
       currentBet: undefined,
       currentAmountBet: 0,
@@ -81,6 +85,8 @@ export default {
     },
     setReward(multiplier) {
       let amountWon = parseInt(this.currentAmountBet) * multiplier;
+      this.playerStats.lastWinAmount = amountWon;
+      this.playerStats.lastBetAmount = parseInt(this.currentAmountBet);
       this.playerStats.lastBet = this.currentBet;
       console.log("Amount won: " + amountWon);
       this.playerStats.money += amountWon;
@@ -179,6 +185,11 @@ export default {
             winRatio = this.betWinRatios.get("col");
           }
           break;
+        case "basket":
+          if (isWin) {
+            winRatio = this.betWinRatios.get("col");
+          }
+          break;
         //If default => Lose => No reward
         default:
           winRatio = 0;
@@ -201,6 +212,7 @@ export default {
       this.betWinRatios.set("doubleStreet", 5);
       this.betWinRatios.set("split", 17);
       this.betWinRatios.set("corner", 8);
+      this.betWinRatios.set("basket", 8);
       this.betWinRatios.set("none", 0);
     },
   },
