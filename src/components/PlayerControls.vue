@@ -16,6 +16,7 @@
     </div>
     <div class="col-12">
       <button
+        id="startRoundBtn"
         class="btn btn-success btn-lg m-2"
         @click="roundStart()"
         :disabled="isRolling"
@@ -110,50 +111,66 @@
     <div class="col-12 col-sm-12 col-lg-12">
       <hr />
       <div class="col-12 mt-3 mx-auto row">
-        <div class="col-12">
+        <div class="col-12 col-lg-4">
           <button
             class="btn btn-light colorBtn m-3"
             @click="betOnCol(0)"
             :disabled="isRolling"
           >
-            Column 1
+            1st Column
           </button>
           <button
             class="btn btn-light colorBtn m-3"
             @click="betOnCol(1)"
             :disabled="isRolling"
           >
-            Column 2
+            2nd Column
           </button>
           <button
             class="btn btn-light colorBtn m-3"
             @click="betOnCol(2)"
             :disabled="isRolling"
           >
-            Column 3
+            3rd Column
           </button>
         </div>
-        <div class="col-12">
+        <div class="col-12 col-lg-4">
+          <button
+            class="btn btn-light colorBtn m-3"
+            @click="betOnHalf(0)"
+            :disabled="isRolling"
+          >
+            1st Half
+          </button>
+          <button
+            class="btn btn-light colorBtn m-3"
+            @click="betOnHalf(1)"
+            :disabled="isRolling"
+          >
+            2nd Half
+          </button>
+        </div>
+        <div class="col-12 col-lg-4">
           <button
             class="btn btn-light colorBtn m-3"
             @click="betOnThird(0)"
             :disabled="isRolling"
           >
-            1-12
+            1st Third
           </button>
           <button
             class="btn btn-light colorBtn m-3"
             @click="betOnThird(1)"
             :disabled="isRolling"
           >
-            12-24
+            2nd Third
           </button>
           <button
             class="btn btn-light colorBtn m-3"
             @click="betOnThird(2)"
             :disabled="isRolling"
           >
-            24-36
+            3rd Third
           </button>
         </div>
         <div class="col-12">
@@ -240,9 +257,11 @@ export default {
     //TODO: Make Subset-Props
     betOn(gridProp) {
       this.betData = gridProp;
+      this.scrollToElement(document.getElementById("startRoundBtn"), 300);
     },
     betOnZero() {
       this.betData = new gridProp("number", [0], "green");
+      this.scrollToElement(document.getElementById("startRoundBtn"), 300);
     },
     betOnColor(color) {
       if (color == "red") {
@@ -252,6 +271,7 @@ export default {
         let nums = this.numberGrid.subsets.redBlack[1];
         this.betData = new gridProp("color", nums, color);
       }
+      this.scrollToElement(document.getElementById("startRoundBtn"), 300);
     },
     betOnOddEven(type) {
       if (type == "odd") {
@@ -261,6 +281,7 @@ export default {
         let nums = this.numberGrid.subsets.oddEven[1];
         this.betData = new gridProp("even", nums, "none");
       }
+      this.scrollToElement(document.getElementById("startRoundBtn"), 300);
     },
     betOnThird(num) {
       if (num == 0) {
@@ -273,6 +294,7 @@ export default {
         let nums = this.numberGrid.subsets.thirds[2];
         this.betData = new gridProp("third_c", nums, "none");
       }
+      this.scrollToElement(document.getElementById("startRoundBtn"), 300);
     },
     betOnCol(num) {
       if (num == 0) {
@@ -285,6 +307,7 @@ export default {
         let nums = this.numberGrid.subsets.columns[2];
         this.betData = new gridProp("col_c", nums, "none");
       }
+      this.scrollToElement(document.getElementById("startRoundBtn"), 300);
     },
     betOnHalf(num) {
       if (num == 0) {
@@ -294,6 +317,16 @@ export default {
         let nums = this.numberGrid.subsets.halfs[1];
         this.betData = new gridProp("half_b", nums, "none");
       }
+      this.scrollToElement(document.getElementById("startRoundBtn"), 300);
+    },
+    //TODO: Make global
+    scrollToElement: (element, offset = 0) => {
+      let elemScrollY = element.getBoundingClientRect().top;
+      let bodyY = document.body.getBoundingClientRect().top;
+      window.scrollTo({
+        top: elemScrollY - bodyY - offset,
+        behavior: "smooth",
+      });
     },
   },
   computed: {
@@ -404,7 +437,7 @@ export default {
     max-height: none;
     max-width: none;
     overflow: auto;
-    margin: auto 0;
+    margin: auto;
     width: 300px;
   }
   .numFieldWrapper {

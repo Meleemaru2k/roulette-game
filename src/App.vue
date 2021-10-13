@@ -1,11 +1,11 @@
 <template>
-  <div class="container">
-    <Scoreboard
-      :highest-amount-won="playerStats.highestWin"
-      :player-money="playerStats.money"
-      :current-bet="currentBet"
-    />
+  <div class="container m-s-0">
     <div class="row">
+      <Scoreboard
+        :highest-amount-won="playerStats.highestWin"
+        :player-money="playerStats.money"
+        :current-bet="currentBet"
+      />
       <div class="bg-light col-12 col-lg-12 p-3 mb-3 rounded row mx-auto">
         <Gamefield
           :last-bet="playerStats.lastBet"
