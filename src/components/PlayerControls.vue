@@ -211,7 +211,7 @@
 <script>
 //import grid from "../classes/rouletteGrid";
 //import gridProp from "../classes/rouletteGridProp"
-//import { toRaw } from "vue";
+import { toRaw } from "vue";
 import gridProp from "../classes/rouletteGridProp";
 import EventBus from "../eventBus";
 export default {
@@ -241,8 +241,8 @@ export default {
     roundStart() {
       this.isRolling = true;
       EventBus.emit("roundStart", {
-        betData: this.betData,
-        amountBet: this.amountBet,
+        betData: toRaw(this.betData),
+        amountBet: toRaw(this.amountBet),
       });
     },
     getColor(gridProp) {

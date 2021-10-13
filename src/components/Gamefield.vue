@@ -45,7 +45,9 @@ export default {
         let timeOut = -t + 10 * 3;
         await this.sleep(timeOut).then(() => this.rollNumber());
       }
+      console.log("----roll finished");
       EventBus.emit("rollFinished", this.rollResult);
+      console.log("----roll finished EMIT");
       this.isRolling = false;
     },
     rollNumber() {
