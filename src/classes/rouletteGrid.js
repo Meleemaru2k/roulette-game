@@ -54,8 +54,9 @@ export default class grid {
         let color = this.subsets.redBlack[0].includes(num) ? "red" : "black";
 
         let cornerNumbers = this.getCornerNumbers(i, simpleGrid, iRow);
-        let splitNumbers = this.getSplitNumbers(i, simpleGrid, iRow);
         let streetNumbers = this.getStreetNumbers(simpleGrid, iRow);
+
+        let splitNumbers = this.getVerticalSplitNumbers(i, simpleGrid, iRow);
 
         //TODO: Implement horizontal Splits and DoubleStreet Corners
         //If i = 0 or i = 2 respectively...exception: for dStreet iRow = 0
@@ -76,7 +77,15 @@ export default class grid {
     return complexGrid;
   }
 
-  getSplitNumbers(numIndex, simpleGrid, row) {
+  getHorizontalSplitNumbers(numIndex, simpleGrid, row) {
+    let splitnumbers = [];
+    splitnumbers.push(simpleGrid[row - 1] ? simpleGrid[row - 1][numIndex] : undefined);
+    splitnumbers.push(simpleGrid[row][numIndex]);
+    splitnumbers = splitnumbers.filter((x) => x != undefined);
+    return splitnumbers;
+  }
+
+  getVerticalSplitNumbers(numIndex, simpleGrid, row) {
     let splitnumbers = [];
     splitnumbers.push(simpleGrid[row - 1] ? simpleGrid[row - 1][numIndex] : undefined);
     splitnumbers.push(simpleGrid[row][numIndex]);

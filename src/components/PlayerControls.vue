@@ -16,75 +16,98 @@
     </div>
     <div class="col-12">
       <button
-        class="btn btn-success m-3"
+        class="btn btn-success btn-lg m-2"
         @click="roundStart()"
         :disabled="isRolling"
       >
-        GO!
+        - GO! -
       </button>
+      <hr />
     </div>
-    <div class="col-12 col-sm-12 col-lg-12">
-      <button
-        class="btn btn-success numZeroBtn mx-auto mb-3"
-        @click="betOnZero()"
-        :disabled="isRolling"
-      >
-        0
-      </button>
-      <div
-        v-for="(row, index) in gridData"
-        :key="index"
-        class="col-12 my-1 mx-auto row g-0"
-        style="width: 250px"
-      >
-        <div v-for="(gridProp, index) in row" :key="index" class="col-4 d-flex">
+    <div class="col-12 col-sm-12 col-lg-12 numFieldWrapper">
+      <div class="numField align-content-end flex-row">
+        <button
+          class="btn btn-success numZeroBtn border border-light mx-auto mb-3"
+          @click="betOnZero()"
+          :disabled="isRolling"
+        >
+          0
+        </button>
+        <div
+          v-for="(row, index) in gridData"
+          :key="index"
+          class="col-12 my-1 mx-auto row g-0"
+          style="width: 250px"
+        >
           <div
-            v-for="(gridItem, index) in gridProp"
+            v-for="(gridProp, index) in row"
             :key="index"
-            class="col-6 mx-auto"
+            class="col-4 d-flex"
           >
-            <div v-for="(val, index) in gridItem" :key="index" class="mx-auto">
-              <button
-                v-if="val.type == 'number'"
-                class="btn numBtn mx-auto my-1"
-                :class="[getColor(val) ? 'btn-danger' : 'btn-dark']"
-                :title="val.numbers"
-                @click="betOn(val)"
-                :disabled="isRolling"
+            <div
+              v-for="(gridItem, index) in gridProp"
+              :key="index"
+              class="col-6 mx-auto"
+            >
+              <div
+                v-for="(val, index) in gridItem"
+                :key="index"
+                class="mx-auto"
               >
-                {{ val.numbers[0] }}
-              </button>
-              <button
-                v-else-if="val.type == 'corner'"
-                class="btn btn-secondary numBtn mx-auto my-1"
-                :title="val.numbers"
-                @click="betOn(val)"
-                :disabled="isRolling"
-              >
-                C
-              </button>
-              <button
-                v-else-if="val.type == 'split'"
-                class="btn btn-secondary numBtn mx-auto my-1"
-                :title="val.numbers"
-                @click="betOn(val)"
-                :disabled="isRolling"
-              >
-                S
-              </button>
-              <button
-                v-else-if="val.type == 'street'"
-                class="btn btn-secondary numBtn mx-auto my-1"
-                :title="val.numbers"
-                @click="betOn(val)"
-                :disabled="isRolling"
-              >
-                R
-              </button>
+                <button
+                  v-if="val.type == 'number'"
+                  class="btn numBtn mx-auto my-1 border border-light"
+                  :class="[getColor(val) ? 'btn-danger' : 'btn-dark']"
+                  :title="val.numbers"
+                  @click="betOn(val)"
+                  :disabled="isRolling"
+                >
+                  {{ val.numbers[0] }}
+                </button>
+                <button
+                  v-else-if="val.type == 'corner'"
+                  class="btn btn-secondary subgridBtn mx-auto my-1"
+                  :title="val.numbers"
+                  @click="betOn(val)"
+                  :disabled="isRolling"
+                >
+                  &#183;
+                </button>
+                <button
+                  v-else-if="val.type == 'split'"
+                  class="btn btn-secondary subgridBtn mx-auto my-1"
+                  :title="val.numbers"
+                  @click="betOn(val)"
+                  :disabled="isRolling"
+                >
+                  +
+                </button>
+                <button
+                  v-else-if="val.type == 'street'"
+                  class="btn btn-secondary subgridBtn mx-auto my-1"
+                  :title="val.numbers"
+                  @click="betOn(val)"
+                  :disabled="isRolling"
+                >
+                  -
+                </button>
+                <button
+                  v-else-if="val.type == 'doubleStreet'"
+                  class="btn btn-secondary subgridBtn mx-auto my-1"
+                  :title="val.numbers"
+                  @click="betOn(val)"
+                  :disabled="isRolling"
+                >
+                  =
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
+    <div class="col-12 col-sm-12 col-lg-12">
+      <hr />
       <div class="col-12 mt-3 mx-auto row">
         <div class="col-12">
           <button
@@ -346,6 +369,27 @@ export default {
   text-align: center;
   padding: 2px;
   margin: 0px;
+  transform: rotate(90deg);
+}
+.subgridBtn {
+  //min-width: 50px;
+  width: 25px;
+  height: 25px;
+  font-size: 15px;
+  text-align: center;
+  padding: 2px;
+  margin: 0px;
+  border-radius: 100%;
+}
+.numField {
+  transform: rotate(-90deg);
+  max-height: 300px;
+  max-width: 300px;
+  overflow: visible;
+  margin: 0px 0px 0px 150px;
+}
+.numFieldWrapper {
+  max-height: 300px;
 }
 .numZeroBtn {
   width: 140px;
