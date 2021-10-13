@@ -33,7 +33,8 @@ export default class grid {
   //Create a simple grid, extract subsets, create an advanced Roulette-Type-Grid
   setupGrid() {
     this.simpleGrid = this.createNumberGrid();
-
+    console.log("simpleGrid");
+    console.log(this.simpleGrid);
     this.subsets.redBlack = this.getRedAndBlackNumbers();
     this.subsets.oddEven = this.getOddEvenNumbers();
     this.subsets.columns = this.getColumnNumbers();
@@ -53,19 +54,33 @@ export default class grid {
         let num = simpleGrid[iRow][i];
         let color = this.subsets.redBlack[0].includes(num) ? "red" : "black";
 
-        let cornerNumbers = this.getCornerNumbers(i, simpleGrid, iRow);
         let streetNumbers = this.getStreetNumbers(simpleGrid, iRow);
-
-        let splitNumbers = this.getVerticalSplitNumbers(i, simpleGrid, iRow);
+        let splitNumbersVertical = this.getVerticalSplitNumbers(i, simpleGrid, iRow);
 
         //TODO: Implement horizontal Splits and DoubleStreet Corners
         //If i = 0 or i = 2 respectively...exception: for dStreet iRow = 0
-        let top_left = new gridProp("corner", cornerNumbers[0], "none");
-        let top = new gridProp("split", splitNumbers, "none");
-        let cen_left = new gridProp("street", streetNumbers, "none");
-        let cen = new gridProp("number", [num], color);
 
-        //HACK: Orderered for visual presentation, should be done via Vue/Rendering
+        let cen = new gridProp("number", [num], color);
+        let top = new gridProp("split", splitNumbersVertical, "none");
+
+        let top_left;
+        if (iRow > 0 && i == 0) {
+          let doubleStreetNumbers = this.getDoubleStreetNumbers(simpleGrid, iRow);
+          top_left = new gridProp("doubleStreet", doubleStreetNumbers, "none");
+        } else {
+          let cornerNumbers = this.getCornerNumbers(i, simpleGrid, iRow);
+          top_left = new gridProp("corner", cornerNumbers, "none");
+        }
+
+        let cen_left; //If first row index => Street ; else horizontal split
+        if (i != 0) {
+          let splitNumbersHorizontal = this.getHorizontalSplitNumbers(i, simpleGrid, iRow);
+          cen_left = new gridProp("split", splitNumbersHorizontal, "none");
+        } else {
+          cen_left = new gridProp("street", streetNumbers, "none");
+        }
+
+        //HACK: Orderered for visual representation, should be done via Vue/Rendering
         let gridItem = [
           [top_left, cen_left],
           [top, cen],
@@ -77,14 +92,6 @@ export default class grid {
     return complexGrid;
   }
 
-  getHorizontalSplitNumbers(numIndex, simpleGrid, row) {
-    let splitnumbers = [];
-    splitnumbers.push(simpleGrid[row - 1] ? simpleGrid[row - 1][numIndex] : undefined);
-    splitnumbers.push(simpleGrid[row][numIndex]);
-    splitnumbers = splitnumbers.filter((x) => x != undefined);
-    return splitnumbers;
-  }
-
   getVerticalSplitNumbers(numIndex, simpleGrid, row) {
     let splitnumbers = [];
     splitnumbers.push(simpleGrid[row - 1] ? simpleGrid[row - 1][numIndex] : undefined);
@@ -93,9 +100,28 @@ export default class grid {
     return splitnumbers;
   }
 
+  getHorizontalSplitNumbers(numIndex, simpleGrid, row) {
+    let splitnumbers = [];
+    splitnumbers.push(simpleGrid[row][numIndex - 1]);
+    splitnumbers.push(simpleGrid[row][numIndex]);
+    splitnumbers = splitnumbers.filter((x) => x != undefined);
+    return splitnumbers;
+  }
+
   getStreetNumbers(simpleGrid, row) {
     let streetNumbers = [];
     for (const num of simpleGrid[row]) {
+      streetNumbers.push(num);
+    }
+    return streetNumbers;
+  }
+
+  getDoubleStreetNumbers(simpleGrid, row) {
+    let streetNumbers = [];
+    for (const num of simpleGrid[row]) {
+      streetNumbers.push(num);
+    }
+    for (const num of simpleGrid[row - 1]) {
       streetNumbers.push(num);
     }
     return streetNumbers;
@@ -115,7 +141,7 @@ export default class grid {
     cornerValues = cornerValues.filter((x) => x != undefined);
     corners.push(cornerValues);
 
-    return corners;
+    return cornerValues;
   }
 
   createNumberGrid() {

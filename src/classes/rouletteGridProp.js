@@ -1,4 +1,5 @@
 export default class gridProp {
+  //TODO: Winratio in gridProp?
   constructor(type, numbers, color) {
     //Types:
     //number

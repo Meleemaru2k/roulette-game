@@ -1,5 +1,5 @@
 <template>
-  <div class="row m-3">
+  <div class="row m-1">
     <div class="col-6">
       <div class="alert alert-success" role="alert">
         Money: {{ playerMoney }} $

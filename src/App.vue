@@ -7,7 +7,10 @@
     />
     <div class="row">
       <div class="bg-light col-12 col-lg-12 p-3 mb-3 rounded row mx-auto">
-        <Gamefield />
+        <Gamefield
+          :last-bet="playerStats.lastBet"
+          :last-bet-win="playerStats.lastWin"
+        />
       </div>
       <div class="bg-dark col-12 col-lg-12 p-3 rounded row mx-auto">
         <PlayerControls
@@ -26,6 +29,7 @@ import PlayerControls from "./components/PlayerControls.vue";
 //import { toRaw } from "vue";
 import gameGrid from "./classes/rouletteGrid";
 import EventBus from "./eventBus";
+import gridProp from "./classes/rouletteGridProp";
 
 export default {
   name: "App",
@@ -38,7 +42,12 @@ export default {
     return {
       gamefieldGrid: new gameGrid(),
       betWinRatios: new Map(),
-      playerStats: { highestWin: 0, money: 1000, lastBet: 0, lastWin: 0 },
+      playerStats: {
+        highestWin: 0,
+        money: 1000,
+        lastBet: new gridProp("none", [], "none"),
+        lastWin: false,
+      },
       currentBet: undefined,
       currentAmountBet: 0,
       currentResult: undefined,
@@ -57,7 +66,8 @@ export default {
     EventBus.on("rollFinished", (result) => {
       console.log("Roll-Result is: " + result);
       console.log("Roll-Bet was: ");
-      console.log(this.currentBet.numbers);
+      console.log(this.currentBet);
+      console.log(this.currentBet.numbers.toString());
       console.log("Money bet was: " + this.currentAmountBet);
       this.calculateReward(result, this.currentBet);
     });
@@ -71,6 +81,7 @@ export default {
     },
     setReward(multiplier) {
       let amountWon = parseInt(this.currentAmountBet) * multiplier;
+      this.playerStats.lastBet = this.currentBet;
       console.log("Amount won: " + amountWon);
       this.playerStats.money += amountWon;
       this.setHighscore(amountWon);
@@ -82,6 +93,7 @@ export default {
       let betType = roundBet.type;
       console.log("Bet-Type was: " + betType);
       let isWin = this.isWin(roundResult, roundBet);
+      this.playerStats.lastWin = isWin;
       console.log("Is it a win? " + isWin);
       let winRatio = 0;
       //var result;

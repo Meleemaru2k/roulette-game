@@ -30,6 +30,7 @@
           class="btn btn-success numZeroBtn border border-light mx-auto mb-3"
           @click="betOnZero()"
           :disabled="isRolling"
+          style="width: 80%"
         >
           0
         </button>
@@ -184,7 +185,6 @@
           >
             Odd
           </button>
-          <hr />
         </div>
       </div>
     </div>

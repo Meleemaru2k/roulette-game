@@ -1,11 +1,15 @@
 <template>
-  <div>
+  <div style="position: relative">
     <!-- <div class="rouletteTableBg">
       <div class="rouletteBall"></div>
     </div> -->
     <button type="button" class="btn btn-primary btn-lg rouletteBtn">
       {{ rollResult }}
     </button>
+    <p class="m-1 text">
+      Last Bet: T: {{ lastBet.type }} | N: {{ lastBet.numbers }} | C:
+      {{ lastBet.color }} | W: {{ lastBetWin }}
+    </p>
   </div>
 </template>
 
@@ -17,6 +21,8 @@ export default {
   props: {
     msg: String,
     numberRange: Array,
+    lastBet: Object,
+    lastBetWin: Boolean,
   },
   data() {
     return {
