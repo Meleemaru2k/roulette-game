@@ -1,12 +1,15 @@
 <template>
   <div class="container">
-    <Scoreboard />
+    <Scoreboard
+      :highest-amount-won="playerStats.highestWin"
+      :player-money="playerStats.money"
+    />
     <div class="row">
-      <div class="bg-dark col-12 col-lg-6 p-3 rounded row mx-0">
-        <PlayerControls :number-grid="numberGrid" />
-      </div>
-      <div class="bg-light col-12 col-lg-6 p-3 rounded row mx-0">
+      <div class="bg-light col-12 col-lg-12 p-3 mb-3 rounded row mx-0">
         <Gamefield :number-min-max="numberMinMax" />
+      </div>
+      <div class="bg-dark col-12 col-lg-12 p-3 rounded row mx-0">
+        <PlayerControls :number-grid="gamefieldGrid.grid" />
       </div>
     </div>
   </div>
@@ -17,6 +20,7 @@ import Scoreboard from "./components/Scoreboard.vue";
 import Gamefield from "./components/Gamefield.vue";
 import PlayerControls from "./components/PlayerControls.vue";
 import { toRaw } from "vue";
+import gameGrid from "./classes/rouletteGrid";
 
 export default {
   name: "App",
@@ -25,39 +29,47 @@ export default {
     PlayerControls,
     Scoreboard,
   },
-  mounted() {
-    this.numberGrid = this.setNumberGrid();
-    console.log(toRaw(this.numberGrid));
-  },
   data() {
     return {
-      numberMinMax: [0, 36],
-      incrementNumberInterval: 3,
-      numberGrid: [],
+      gamefieldGrid: new gameGrid(),
+      betWinRatios: new Map(),
+      playerStats: { highestWin: 999, money: 9999 },
     };
   },
+  mounted() {
+    this.setBetWinPayouts();
+    console.log(toRaw(this.numberGrid));
+  },
   methods: {
-    setNumberGrid() {
-      let grid = [];
-      let columns = this.numberMinMax[1] / this.incrementNumberInterval;
-
-      for (let iCol = 0; iCol < columns; iCol++) {
-        grid[iCol] = [];
-        let colNumStart = 1 + iCol * 3;
-        let colNumEnd = colNumStart + 3;
-
-        for (let iNum = colNumStart; iNum < colNumEnd; iNum++) {
-          grid[iCol].push(iNum);
-        }
-      }
-
-      return grid;
-    },
     setHighscore(amountWon) {
-      console.log(amountWon);
+      if (amountWon > this.playerStats.highestWin) {
+        this.playerStats.highestWin = amountWon;
+      }
     },
     setMoney(amountWon) {
-      console.log(amountWon);
+      this.playerStats.money += amountWon;
+    },
+    calculateReward(roundResult = Number, roundBet) {
+      console.log(roundResult, roundBet);
+    },
+    checkIfWin: {
+      straightUp(roundResult, roundBet) {
+        console.log(roundResult, roundBet);
+      },
+    },
+    setBetTypes() {},
+    setBetWinPayouts() {
+      this.betWinRatios.set("straightUp", "35");
+      this.betWinRatios.set("color", "1");
+      this.betWinRatios.set("evenOrOdd", "1");
+      this.betWinRatios.set("half", "1");
+      this.betWinRatios.set("third", "2");
+      this.betWinRatios.set("col", "2");
+      this.betWinRatios.set("street", "11");
+      this.betWinRatios.set("doubleStreet", "5");
+      this.betWinRatios.set("split", "17");
+      this.betWinRatios.set("corner", "8");
+      this.betWinRatios.set("none", "0");
     },
   },
 };

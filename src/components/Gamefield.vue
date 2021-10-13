@@ -1,8 +1,15 @@
 <template>
   <div>
-    <div class="rouletteTableBg">
+    <!-- <div class="rouletteTableBg">
       <div class="rouletteBall"></div>
-    </div>
+    </div> -->
+    <button
+      type="button"
+      class="btn btn-primary btn-lg rouletteBtn"
+      @click="playRound()"
+    >
+      {{ rollResult }}
+    </button>
   </div>
 </template>
 
@@ -14,20 +21,39 @@ export default {
     numberRange: Array,
   },
   data() {
-    return {};
+    return {
+      numberResult: 0,
+      rollResult: 0,
+    };
   },
   methods: {
-    playRound() {},
-    calculateReward(roundResult, roundBet) {
-      console.log(roundResult, roundBet);
+    playRound() {
+      for (var t = 50; t != 0; t--) {
+        let timeOut = t * 75;
+        this.sleep(timeOut).then(() => this.rollNumber());
+      }
+      //emit result via event
+    },
+    rollNumber() {
+      var rngNum = Math.floor(Math.random() * 37);
+      console.log(rngNum);
+      this.rollResult = rngNum;
+    },
+    //TODO: Make this an importable script
+    sleep(ms) {
+      return new Promise((resolve) => setTimeout(resolve, ms));
     },
   },
   computed: {},
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+.rouletteBtn {
+  border-radius: 0px;
+  width: 100px;
+}
+//Unused
 $roulette-size: 250px;
 $ball-size: 15px;
 .rouletteTableBg {

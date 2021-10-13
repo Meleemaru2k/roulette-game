@@ -18,9 +18,11 @@ export default {
   name: "Scoreboard",
   props: {
     msg: String,
+    highestAmountWon: Number,
+    playerMoney: Number,
   },
   data() {
-    return { highestAmountWon: 999, playerMoney: 9999 };
+    return {};
   },
   methods: {},
   computed: {},
@@ -28,4 +30,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
+//
 </style>
