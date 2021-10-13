@@ -2,12 +2,12 @@
   <div class="row m-3">
     <div class="col-6">
       <div class="alert alert-success" role="alert">
-        Money: {{ playerMoney }}
+        Money: {{ playerMoney }} $ on {{ getCurrentBet }}
       </div>
     </div>
     <div class="col-6">
       <div class="alert alert-primary" role="alert">
-        Highest Amount Won: {{ highestAmountWon }}
+        Highest Amount Won: {{ highestAmountWon }} $
       </div>
     </div>
   </div>
@@ -20,12 +20,21 @@ export default {
     msg: String,
     highestAmountWon: Number,
     playerMoney: Number,
+    currentBet: Number,
   },
   data() {
     return {};
   },
   methods: {},
-  computed: {},
+  computed: {
+    getCurrentBet() {
+      if (this.currentBet == undefined) {
+        return "a whole lot of nothing.";
+      } else {
+        return this.currentBet;
+      }
+    },
+  },
 };
 </script>
 

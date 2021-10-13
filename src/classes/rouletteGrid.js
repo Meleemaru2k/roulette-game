@@ -25,22 +25,20 @@ export default class grid {
       for (let i = 0; i < simpleGrid[iRow].length; i++) {
         let num = simpleGrid[iRow][i];
         let color = this.numbersRed.includes(num) ? "red" : "black";
-        let cornerNumbers = this.getCornerNumbers(i, simpleGrid, iRow);
-        console.log(cornerNumbers);
-        let top_left = new gridProp("corner", [], "none");
-        let top = new gridProp("split", [], "none");
-        let top_right = new gridProp("corner", [], "none");
-        let cen_left = new gridProp("street", [], "none");
-        let cen = new gridProp("number", [num], color);
-        let cen_right = new gridProp("street", [], "none");
-        let bot_left = new gridProp("corner", [], "none");
-        let bot = new gridProp("split", [], "none");
-        let bot_right = new gridProp("corner", [], "none");
 
+        let cornerNumbers = this.getCornerNumbers(i, simpleGrid, iRow);
+        let splitNumbers = this.getSplitNumbers(i, simpleGrid, iRow);
+        let streetNumbers = this.getStreetNumbers(simpleGrid, iRow);
+
+        let top_left = new gridProp("corner", cornerNumbers, "none");
+        let top = new gridProp("split", splitNumbers, "none");
+        let cen_left = new gridProp("street", streetNumbers, "none");
+        let cen = new gridProp("number", [num], color);
+
+        //HACK: Orderered for visual presentation, should be done via Vue/Rendering
         let gridItem = [
-          [top_left, top, top_right],
-          [cen_left, cen, cen_right],
-          [bot_left, bot, bot_right],
+          [top_left, cen_left],
+          [top, cen],
         ];
         complexGrid[iRow].push(gridItem);
       }
@@ -49,24 +47,33 @@ export default class grid {
     return complexGrid;
   }
 
-  getSplitNumbers(numIndex, simpleGrid, row){
-    simpleGrid[row] ? simpleGrid[row][numIndex]
+  getSplitNumbers(numIndex, simpleGrid, row) {
+    let splitnumbers = [];
+    splitnumbers.push(simpleGrid[row - 1] ? simpleGrid[row - 1][numIndex] : undefined);
+    splitnumbers.push(simpleGrid[row][numIndex]);
+    splitnumbers = splitnumbers.filter((x) => x != undefined);
+    return splitnumbers;
+  }
+
+  getStreetNumbers(simpleGrid, row) {
+    let streetNumbers = [];
+    for (const num of simpleGrid[row]) {
+      streetNumbers.push(num);
+    }
+    return streetNumbers;
   }
 
   getCornerNumbers(numIndex, simpleGrid, row) {
-    //top left corner as starting point, clockwise rotation
-    var corners = [];
-    for (let cornerIndex = 0; cornerIndex < 4; cornerIndex++) {
-      //bot right, bot left, top left, top right
-      let cornerValues = [];
-      cornerValues.push(simpleGrid[row] ? simpleGrid[row][numIndex] : undefined);
-      cornerValues.push(simpleGrid[row] ? simpleGrid[row][numIndex - 1] : undefined);
-      cornerValues.push(simpleGrid[row - 1] ? simpleGrid[row - 1][numIndex - 1] : undefined);
-      cornerValues.push(simpleGrid[row - 1] ? simpleGrid[row - 1][numIndex] : undefined);
-
-      console.log(cornerValues);
-      corners.push(cornerValues);
-    }
+    //top left corner only
+    let corners = [];
+    //bot right, bot left, top left, top right
+    let cornerValues = [];
+    cornerValues.push(simpleGrid[row] ? simpleGrid[row][numIndex] : undefined);
+    cornerValues.push(simpleGrid[row] ? simpleGrid[row][numIndex - 1] : undefined);
+    cornerValues.push(simpleGrid[row - 1] ? simpleGrid[row - 1][numIndex - 1] : undefined);
+    cornerValues.push(simpleGrid[row - 1] ? simpleGrid[row - 1][numIndex] : undefined);
+    cornerValues = cornerValues.filter((x) => x != undefined);
+    corners.push(cornerValues);
     return corners;
 
     //console.log(bot_r, bot_l, top_r, top_l);
@@ -99,6 +106,8 @@ export default class grid {
   setRedNumbers() {
     return [32, 19, 21, 25, 34, 27, 36, 30, 23, 5, 16, 1, 14, 9, 18, 7, 12, 3];
   }
+
+  //Could be static
   isNumberRed(num) {
     if (this.numbersRed.includes(num)) {
       return true;

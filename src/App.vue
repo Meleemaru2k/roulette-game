@@ -5,10 +5,10 @@
       :player-money="playerStats.money"
     />
     <div class="row">
-      <div class="bg-light col-12 col-lg-12 p-3 mb-3 rounded row mx-0">
+      <div class="bg-light col-12 col-lg-12 p-3 mb-3 rounded row mx-auto">
         <Gamefield :number-min-max="numberMinMax" />
       </div>
-      <div class="bg-dark col-12 col-lg-12 p-3 rounded row mx-0">
+      <div class="bg-dark col-12 col-lg-12 p-3 rounded row mx-auto">
         <PlayerControls :number-grid="gamefieldGrid" />
       </div>
     </div>
