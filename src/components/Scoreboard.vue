@@ -1,12 +1,12 @@
 <template>
   <div class="row m-1">
     <div class="col-6">
-      <div class="alert alert-success" role="alert">
+      <div class="alert alert-success p-2 m-1" role="alert">
         Money: {{ playerMoney }} $
       </div>
     </div>
     <div class="col-6">
-      <div class="alert alert-primary" role="alert">
+      <div class="alert alert-primary p-2 m-1" role="alert">
         Highest Amount Won: {{ highestAmountWon }} $
       </div>
     </div>
