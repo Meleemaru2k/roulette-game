@@ -397,4 +397,29 @@ export default {
 .colorBtn {
   width: 80px;
 }
+
+@media only screen and (max-width: 600px) {
+  .numField {
+    transform: none;
+    max-height: none;
+    max-width: none;
+    overflow: auto;
+    margin: auto 0;
+    width: 300px;
+  }
+  .numFieldWrapper {
+    max-height: none;
+  }
+
+  .numBtn {
+    //min-width: 50px;
+    width: 25px;
+    height: 25px;
+    font-size: 15px;
+    text-align: center;
+    padding: 2px;
+    margin: 0px;
+    transform: none;
+  }
+}
 </style>
