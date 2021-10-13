@@ -42,7 +42,7 @@ export default class grid {
     this.subsets.halfs = this.getHalfsNumbers();
 
     var grid = this.extendNumberGrid(this.simpleGrid);
-    //grid = this.transpose2D(grid);
+
     return grid;
   }
 
@@ -80,6 +80,12 @@ export default class grid {
           cen_left = new gridProp("street", streetNumbers, "none");
         }
 
+        //HACK / TODO: 0 not implemented, this first row above numbers isnt really useful as of now
+        if (iRow == 0) {
+          let gridItem = [[cen_left], [cen]];
+          complexGrid[iRow].push(gridItem);
+          continue;
+        }
         //HACK: Orderered for visual representation, should be done via Vue/Rendering
         let gridItem = [
           [top_left, cen_left],
@@ -161,11 +167,6 @@ export default class grid {
     }
 
     return grid;
-  }
-
-  //https://stackoverflow.com/questions/17428587/transposing-a-2d-array-in-javascript
-  transpose2D(matrix) {
-    return matrix[0].map((col, i) => matrix.map((row) => row[i]));
   }
 
   //TODO: Sort methods into property "getSubsets.method()" for more clarity
