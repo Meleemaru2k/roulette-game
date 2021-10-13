@@ -10,6 +10,16 @@ export default class grid {
       columns: [],
       thirds: [],
       halfs: [],
+      streets: [],
+      doubleStreets: [],
+      redBlack: [],
+    };
+    //TODO: Use this in PlayerControls
+    this.subsetProps = {
+      oddEven: [],
+      columns: [],
+      thirds: [],
+      halfs: [],
       doubleStreet: [],
       redBlack: [],
     };
@@ -20,12 +30,15 @@ export default class grid {
     return this.gridData;
   }
 
+  //Create a simple grid, extract subsets, create an advanced Roulette-Type-Grid
   setupGrid() {
-    //Create a simple grid, extract subsets, create an advanced Roulette-Type-Grid
     this.simpleGrid = this.createNumberGrid();
 
     this.subsets.redBlack = this.getRedAndBlackNumbers();
     this.subsets.oddEven = this.getOddEvenNumbers();
+    this.subsets.columns = this.getColumnNumbers();
+    this.subsets.thirds = this.getThirdsNumbers();
+    this.subsets.halfs = this.getHalfsNumbers();
 
     var grid = this.extendNumberGrid(this.simpleGrid);
     //grid = this.transpose2D(grid);
@@ -131,6 +144,33 @@ export default class grid {
     let odd = this.simpleGrid.flat().filter((x) => x % 2 != 0);
     let even = this.simpleGrid.flat().filter((x) => x % 2 == 0);
     return [odd, even];
+  }
+
+  getColumnNumbers() {
+    let columnData = [[], [], []];
+    //let flatGrid = this.simpleGrid.flat();
+    for (let iCol = 0; iCol < 3; iCol++) {
+      for (let i = 0; i < 12; i++) {
+        columnData[iCol].push(this.simpleGrid[i][iCol]);
+      }
+    }
+    console.log(columnData, "coldata");
+    return columnData;
+  }
+
+  getThirdsNumbers() {
+    let t1 = Array.from(new Array(12), (x, i) => i + 1);
+    let t2 = Array.from(new Array(12), (x, i) => i + 13);
+    let t3 = Array.from(new Array(12), (x, i) => i + 25);
+
+    return [t1, t2, t3];
+  }
+
+  getHalfsNumbers() {
+    let h1 = Array.from(new Array(18), (x, i) => i + 1);
+    let h2 = Array.from(new Array(18), (x, i) => i + 19);
+
+    return [h1, h2];
   }
   //Could be static
   isNumberRed(num) {

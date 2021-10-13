@@ -3,9 +3,9 @@ export default class gridProp {
     //Types:
     //number
     //even, odd
-    //OneToEighteen ote_a, ote_b
-    //OneToTwelve ott_a, ott_b, ott_c
-    //Column col_a, col_b, col_c
+    //halfs
+    //third
+    //Columns
     //Street
     //Doublestreet
     //Split
@@ -39,6 +39,23 @@ export default class gridProp {
     if (!possibleTypes.includes(this.type)) {
       //throw console.error("ok");
     }
+  }
+
+  isNumberIn(num) {
+    if (this.numbers.includes(num)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  compareNumbers(prop) {
+    for (const num of prop.numbers) {
+      let isIn = this.numbers.includes(num);
+      if (isIn) {
+        return true;
+      }
+    }
+    return false;
   }
 
   isEven() {

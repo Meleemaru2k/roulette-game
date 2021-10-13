@@ -20,7 +20,7 @@ export default {
     msg: String,
     highestAmountWon: Number,
     playerMoney: Number,
-    currentBet: Number,
+    currentBet: Object,
   },
   data() {
     return {};

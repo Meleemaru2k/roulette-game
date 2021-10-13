@@ -89,6 +89,29 @@
         <div class="col-12">
           <button
             class="btn btn-light colorBtn m-3"
+            @click="betOnCol(0)"
+            :disabled="isRolling"
+          >
+            Column 1
+          </button>
+          <button
+            class="btn btn-light colorBtn m-3"
+            @click="betOnCol(1)"
+            :disabled="isRolling"
+          >
+            Column 2
+          </button>
+          <button
+            class="btn btn-light colorBtn m-3"
+            @click="betOnCol(2)"
+            :disabled="isRolling"
+          >
+            Column 3
+          </button>
+        </div>
+        <div class="col-12">
+          <button
+            class="btn btn-light colorBtn m-3"
             @click="betOnThird(0)"
             :disabled="isRolling"
           >
@@ -126,7 +149,7 @@
           </button>
           <button
             class="btn btn-light colorBtn m-3"
-            @click="betOnOddEven('odd')"
+            @click="betOnOddEven('even')"
             :disabled="isRolling"
           >
             Even
@@ -175,6 +198,13 @@ export default {
     console.log(this.numberGrid, "ok");
   },
   methods: {
+    roundStart() {
+      this.isRolling = true;
+      EventBus.emit("roundStart", {
+        betData: this.betData,
+        amountBet: this.amountBet,
+      });
+    },
     getColor(gridProp) {
       if (gridProp.type == "number") {
         if (this.numberGrid.isNumberRed(gridProp.numbers[0])) {
@@ -184,6 +214,7 @@ export default {
         }
       } else return false;
     },
+    //TODO: Make Subset-Props
     betOn(gridProp) {
       this.betData = gridProp;
     },
@@ -191,30 +222,55 @@ export default {
       this.betData = new gridProp("number", [0], "green");
     },
     betOnColor(color) {
-      this.betData = new gridProp("color", [], color);
+      if (color == "red") {
+        let nums = this.numberGrid.subsets.redBlack[0];
+        this.betData = new gridProp("color", nums, color);
+      } else {
+        let nums = this.numberGrid.subsets.redBlack[1];
+        this.betData = new gridProp("color", nums, color);
+      }
     },
     betOnOddEven(type) {
       if (type == "odd") {
-        this.betData = new gridProp("color", [], "none");
+        let nums = this.numberGrid.subsets.oddEven[0];
+        this.betData = new gridProp("odd", nums, "none");
       } else {
-        this.betData = new gridProp("color", [], "none");
+        let nums = this.numberGrid.subsets.oddEven[1];
+        this.betData = new gridProp("even", nums, "none");
       }
     },
     betOnThird(num) {
       if (num == 0) {
-        let nums = Array.from(new Array(12), (x, i) => i + 1);
-        this.betData = new gridProp("third_a", nums, "green");
+        let nums = this.numberGrid.subsets.thirds[0];
+        this.betData = new gridProp("third_a", nums, "none");
       } else if (num == 1) {
-        let nums = Array.from(new Array(12), (x, i) => i + 13);
-        this.betData = new gridProp("third_a", nums, "green");
+        let nums = this.numberGrid.subsets.thirds[1];
+        this.betData = new gridProp("third_b", nums, "none");
       } else {
-        let nums = Array.from(new Array(12), (x, i) => i + 25);
-        this.betData = new gridProp("third_a", nums, "green");
+        let nums = this.numberGrid.subsets.thirds[2];
+        this.betData = new gridProp("third_c", nums, "none");
       }
     },
-    roundStart() {
-      this.isRolling = true;
-      EventBus.emit("roundStart", this.betData);
+    betOnCol(num) {
+      if (num == 0) {
+        let nums = this.numberGrid.subsets.columns[0];
+        this.betData = new gridProp("col_a", nums, "none");
+      } else if (num == 1) {
+        let nums = this.numberGrid.subsets.columns[1];
+        this.betData = new gridProp("col_b", nums, "none");
+      } else {
+        let nums = this.numberGrid.subsets.columns[2];
+        this.betData = new gridProp("col_c", nums, "none");
+      }
+    },
+    betOnHalf(num) {
+      if (num == 0) {
+        let nums = this.numberGrid.subsets.halfs[0];
+        this.betData = new gridProp("half_a", nums, "none");
+      } else {
+        let nums = this.numberGrid.subsets.halfs[1];
+        this.betData = new gridProp("half_b", nums, "none");
+      }
     },
   },
   computed: {
@@ -232,6 +288,9 @@ export default {
           result = this.betData.numbers;
           break;
         case "street":
+          result = this.betData.numbers;
+          break;
+        case "doubleStreet":
           result = this.betData.numbers;
           break;
         case "color":
