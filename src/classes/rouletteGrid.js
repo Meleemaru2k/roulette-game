@@ -10,10 +10,12 @@ export default class grid {
       columns: [],
       thirds: [],
       halfs: [],
+      doubleStreet: [],
       redBlack: [],
     };
     this.gridData = this.setupGrid();
   }
+
   get grid() {
     return this.gridData;
   }
@@ -42,6 +44,8 @@ export default class grid {
         let splitNumbers = this.getSplitNumbers(i, simpleGrid, iRow);
         let streetNumbers = this.getStreetNumbers(simpleGrid, iRow);
 
+        //TODO: Implement horizontal Splits and DoubleStreet Corners
+        //If i = 0 or i = 2 respectively...exception: for dStreet iRow = 0
         let top_left = new gridProp("corner", cornerNumbers[0], "none");
         let top = new gridProp("split", splitNumbers, "none");
         let cen_left = new gridProp("street", streetNumbers, "none");
@@ -116,6 +120,7 @@ export default class grid {
     return matrix[0].map((col, i) => matrix.map((row) => row[i]));
   }
 
+  //TODO: Sort methods into property "getSubsets.method()" for more clarity
   getRedAndBlackNumbers() {
     let red = [32, 19, 21, 25, 34, 27, 36, 30, 23, 5, 16, 1, 14, 9, 18, 7, 12, 3];
     let black = this.simpleGrid.flat().filter((x) => !red.includes(x));

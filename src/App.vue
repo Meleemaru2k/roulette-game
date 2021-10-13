@@ -35,7 +35,7 @@ export default {
     return {
       gamefieldGrid: new gameGrid(),
       betWinRatios: new Map(),
-      playerStats: { highestWin: 999, money: 9999 },
+      playerStats: { highestWin: 999, money: 9999, lastBet: 0, lastWin: 0 },
       currentBet: undefined,
       currentResult: undefined,
       isRolling: false,

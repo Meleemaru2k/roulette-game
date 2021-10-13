@@ -3,11 +3,7 @@
     <!-- <div class="rouletteTableBg">
       <div class="rouletteBall"></div>
     </div> -->
-    <button
-      type="button"
-      class="btn btn-primary btn-lg rouletteBtn"
-      @click="playRound()"
-    >
+    <button type="button" class="btn btn-primary btn-lg rouletteBtn">
       {{ rollResult }}
     </button>
   </div>
@@ -26,20 +22,27 @@ export default {
     return {
       numberResult: 0,
       rollResult: 0,
+      isRolling: false,
     };
   },
   mounted() {
+    EventBus.on("roundStart", (betData) => {
+      console.log(betData);
+      this.playRound();
+    });
     EventBus.on("roundFinished", () => {
       (this.numberResult = 0), (this.rollResult = 0);
     });
   },
   methods: {
     async playRound() {
+      this.isRolling = true;
       for (var t = 50; t != 0; t--) {
         let timeOut = -t + 30 * 3;
         await this.sleep(timeOut).then(() => this.rollNumber());
       }
       EventBus.emit("rollFinished", this.rollResult);
+      this.isRolling = false;
     },
     rollNumber() {
       var rngNum = Math.floor(Math.random() * 37);

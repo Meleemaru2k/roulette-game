@@ -15,20 +15,27 @@
       />
     </div>
     <div class="col-12">
-      <button class="btn btn-success m-3">GO!</button>
+      <button
+        class="btn btn-success m-3"
+        @click="roundStart()"
+        :disabled="isRolling"
+      >
+        GO!
+      </button>
     </div>
     <div class="col-12 col-sm-12 col-lg-12">
       <button
         class="btn btn-success numZeroBtn mx-auto mb-3"
         @click="betOnZero()"
+        :disabled="isRolling"
       >
         0
       </button>
       <div
         v-for="(row, index) in gridData"
         :key="index"
-        class="col-12 my-2 mx-auto row"
-        style="width: 350px"
+        class="col-12 my-1 mx-auto row g-0"
+        style="width: 250px"
       >
         <div v-for="(gridProp, index) in row" :key="index" class="col-4 d-flex">
           <div
@@ -43,6 +50,7 @@
                 :class="[getColor(val) ? 'btn-danger' : 'btn-dark']"
                 :title="val.numbers"
                 @click="betOn(val)"
+                :disabled="isRolling"
               >
                 {{ val.numbers[0] }}
               </button>
@@ -51,6 +59,7 @@
                 class="btn btn-secondary numBtn mx-auto my-1"
                 :title="val.numbers"
                 @click="betOn(val)"
+                :disabled="isRolling"
               >
                 C
               </button>
@@ -59,6 +68,7 @@
                 class="btn btn-secondary numBtn mx-auto my-1"
                 :title="val.numbers"
                 @click="betOn(val)"
+                :disabled="isRolling"
               >
                 S
               </button>
@@ -67,6 +77,7 @@
                 class="btn btn-secondary numBtn mx-auto my-1"
                 :title="val.numbers"
                 @click="betOn(val)"
+                :disabled="isRolling"
               >
                 R
               </button>
@@ -76,13 +87,25 @@
       </div>
       <div class="col-12 mt-3 mx-auto row">
         <div class="col-12">
-          <button class="btn btn-light colorBtn m-3" @click="betOnThird(0)">
+          <button
+            class="btn btn-light colorBtn m-3"
+            @click="betOnThird(0)"
+            :disabled="isRolling"
+          >
             1-12
           </button>
-          <button class="btn btn-light colorBtn m-3" @click="betOnThird(1)">
+          <button
+            class="btn btn-light colorBtn m-3"
+            @click="betOnThird(1)"
+            :disabled="isRolling"
+          >
             12-24
           </button>
-          <button class="btn btn-light colorBtn m-3" @click="betOnThird(2)">
+          <button
+            class="btn btn-light colorBtn m-3"
+            @click="betOnThird(2)"
+            :disabled="isRolling"
+          >
             24-36
           </button>
         </div>
@@ -90,24 +113,28 @@
           <button
             class="btn btn-danger colorBtn m-3"
             @click="betOnColor('red')"
+            :disabled="isRolling"
           >
             RED
           </button>
           <button
             class="btn btn-dark colorBtn m-3"
             @click="betOnColor('black')"
+            :disabled="isRolling"
           >
             BLACK
           </button>
           <button
             class="btn btn-light colorBtn m-3"
             @click="betOnOddEven('odd')"
+            :disabled="isRolling"
           >
             Even
           </button>
           <button
             class="btn btn-light colorBtn m-3"
             @click="betOnOddEven('odd')"
+            :disabled="isRolling"
           >
             Odd
           </button>
@@ -123,6 +150,7 @@
 //import gridProp from "../classes/rouletteGridProp"
 //import { toRaw } from "vue";
 import gridProp from "../classes/rouletteGridProp";
+import EventBus from "../eventBus";
 export default {
   name: "PlayerControls",
   props: {
@@ -135,9 +163,15 @@ export default {
       amountBet: 0,
       betData: new gridProp("number", [1], "red"),
       gridData: this.numberGrid.grid,
+      isRolling: false,
     };
   },
   mounted() {
+    EventBus.on("rollFinished", () => {
+      this.amountBet = 0;
+      this.betData = new gridProp("number", [1], "red");
+      this.isRolling = false;
+    });
     console.log(this.numberGrid, "ok");
   },
   methods: {
@@ -177,6 +211,10 @@ export default {
         let nums = Array.from(new Array(12), (x, i) => i + 25);
         this.betData = new gridProp("third_a", nums, "green");
       }
+    },
+    roundStart() {
+      this.isRolling = true;
+      EventBus.emit("roundStart", this.betData);
     },
   },
   computed: {
@@ -247,7 +285,7 @@ export default {
   height: 25px;
   font-size: 15px;
   text-align: center;
-  padding: 3px;
+  padding: 2px;
   margin: 0px;
 }
 .numZeroBtn {
