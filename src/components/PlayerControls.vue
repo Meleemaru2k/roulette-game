@@ -3,7 +3,7 @@
     <!--Number Buttons-->
     <div class="col-12">
       <label for="amountBet" class="form-label text-light"
-        >Your bet: <br />{{ amountBet }} $</label
+        >Your bet: <br />{{ amountBet }} $ on {{ currentBet }}</label
       >
       <input
         v-model="amountBet"
@@ -37,7 +37,7 @@
                 class="btn numBtn mx-auto my-1"
                 :class="[getColor(val) ? 'btn-danger' : 'btn-dark']"
                 :title="val.numbers"
-                @click="chooseBet(val)"
+                @click="betOn(val)"
               >
                 {{ val.numbers[0] }}
               </button>
@@ -45,7 +45,7 @@
                 v-else-if="val.type == 'corner'"
                 class="btn btn-secondary numBtn mx-auto my-1"
                 :title="val.numbers"
-                @click="chooseBet(val)"
+                @click="betOn(val)"
               >
                 C
               </button>
@@ -53,7 +53,7 @@
                 v-else-if="val.type == 'split'"
                 class="btn btn-secondary numBtn mx-auto my-1"
                 :title="val.numbers"
-                @click="chooseBet(val)"
+                @click="betOn(val)"
               >
                 S
               </button>
@@ -61,7 +61,7 @@
                 v-else-if="val.type == 'street'"
                 class="btn btn-secondary numBtn mx-auto my-1"
                 :title="val.numbers"
-                @click="chooseBet(val)"
+                @click="betOn(val)"
               >
                 R
               </button>
@@ -71,15 +71,41 @@
       </div>
       <div class="col-12 mt-3 mx-auto row">
         <div class="col-12">
-          <button class="btn btn-light colorBtn m-3">1-12</button>
-          <button class="btn btn-light colorBtn m-3">12-24</button>
-          <button class="btn btn-light colorBtn m-3">24-36</button>
+          <button class="btn btn-light colorBtn m-3" @click="betOnOtt(0)">
+            1-12
+          </button>
+          <button class="btn btn-light colorBtn m-3" @click="betOnOtt(1)">
+            12-24
+          </button>
+          <button class="btn btn-light colorBtn m-3" @click="betOnOtt(2)">
+            24-36
+          </button>
         </div>
         <div class="col-12">
-          <button class="btn btn-danger colorBtn m-3">RED</button>
-          <button class="btn btn-dark colorBtn m-3">BLACK</button>
-          <button class="btn btn-light colorBtn m-3">Even</button>
-          <button class="btn btn-light colorBtn m-3">Odd</button>
+          <button
+            class="btn btn-danger colorBtn m-3"
+            @click="betOnColor('red')"
+          >
+            RED
+          </button>
+          <button
+            class="btn btn-dark colorBtn m-3"
+            @click="betOnColor('black')"
+          >
+            BLACK
+          </button>
+          <button
+            class="btn btn-light colorBtn m-3"
+            @click="betOnOddEven('even')"
+          >
+            Even
+          </button>
+          <button
+            class="btn btn-light colorBtn m-3"
+            @click="betOnOddEven('odd')"
+          >
+            Odd
+          </button>
           <hr />
         </div>
       </div>
@@ -90,7 +116,8 @@
 <script>
 //import grid from "../classes/rouletteGrid";
 //import gridProp from "../classes/rouletteGridProp"
-import { toRaw } from "vue";
+//import { toRaw } from "vue";
+import gridProp from "../classes/rouletteGridProp";
 export default {
   name: "PlayerControls",
   props: {
@@ -101,7 +128,7 @@ export default {
   data() {
     return {
       amountBet: 0,
-      betData: null,
+      betData: new gridProp("number", [1], "red"),
       gridData: this.numberGrid.grid,
     };
   },
@@ -118,11 +145,27 @@ export default {
         }
       } else return false;
     },
-    chooseBet(gridProp) {
-      this.betData = toRaw(gridProp);
+    betOn(gridProp) {
+      this.betData = gridProp;
+    },
+    betOnZero() {
+      this.betData = new gridProp("number", [0], "green");
+    },
+    betOnColor(color) {
+      this.betData = new gridProp("color", [], color);
     },
   },
-  computed: {},
+  computed: {
+    currentBet() {
+      if (this.betData?.type == "number") {
+        return this.betData.numbers;
+      } else if (this.betData?.type == "color") {
+        return this.betData.color;
+      } else {
+        return "...";
+      }
+    },
+  },
 };
 </script>
 

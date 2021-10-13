@@ -2,7 +2,7 @@
   <div class="row m-3">
     <div class="col-6">
       <div class="alert alert-success" role="alert">
-        Money: {{ playerMoney }} $ on {{ getCurrentBet }}
+        Money: {{ playerMoney }} $
       </div>
     </div>
     <div class="col-6">

@@ -3,6 +3,7 @@
     <Scoreboard
       :highest-amount-won="playerStats.highestWin"
       :player-money="playerStats.money"
+      :current-bet="currentBet"
     />
     <div class="row">
       <div class="bg-light col-12 col-lg-12 p-3 mb-3 rounded row mx-auto">
@@ -21,6 +22,7 @@ import Gamefield from "./components/Gamefield.vue";
 import PlayerControls from "./components/PlayerControls.vue";
 //import { toRaw } from "vue";
 import gameGrid from "./classes/rouletteGrid";
+import EventBus from "./eventBus";
 
 export default {
   name: "App",
@@ -34,10 +36,16 @@ export default {
       gamefieldGrid: new gameGrid(),
       betWinRatios: new Map(),
       playerStats: { highestWin: 999, money: 9999 },
+      currentBet: undefined,
+      currentResult: undefined,
+      isRolling: false,
     };
   },
   mounted() {
     this.setBetWinPayouts();
+    EventBus.on("rollFinished", (result) => {
+      console.log(result);
+    });
   },
   methods: {
     setHighscore(amountWon) {
@@ -56,7 +64,6 @@ export default {
         console.log(roundResult, roundBet);
       },
     },
-    setBetTypes() {},
     setBetWinPayouts() {
       this.betWinRatios.set("straightUp", "35");
       this.betWinRatios.set("color", "1");

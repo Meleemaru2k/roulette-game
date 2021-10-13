@@ -14,6 +14,8 @@
 </template>
 
 <script>
+//import Vue from "vue";
+import EventBus from "../eventBus";
 export default {
   name: "GameField",
   props: {
@@ -26,13 +28,18 @@ export default {
       rollResult: 0,
     };
   },
+  mounted() {
+    EventBus.on("roundFinished", () => {
+      (this.numberResult = 0), (this.rollResult = 0);
+    });
+  },
   methods: {
-    playRound() {
+    async playRound() {
       for (var t = 50; t != 0; t--) {
-        let timeOut = t * 75;
-        this.sleep(timeOut).then(() => this.rollNumber());
+        let timeOut = t * 3;
+        await this.sleep(timeOut).then(() => this.rollNumber());
       }
-      //emit result via event
+      EventBus.emit("rollFinished", this.rollResult);
     },
     rollNumber() {
       var rngNum = Math.floor(Math.random() * 37);
