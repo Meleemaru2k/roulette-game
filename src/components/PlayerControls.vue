@@ -536,7 +536,7 @@ export default {
     max-height: 300px;
     max-width: 300px;
     overflow: visible;
-    margin: 0px 0px 0px 50px;
+    margin: 0px 0px 0px 75px;
   }
   .numFieldWrapper {
     max-height: 300px;
