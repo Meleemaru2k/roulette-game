@@ -228,4 +228,26 @@ export default {
   color: #2c3e50;
   margin-top: 30px;
 }
+.btn {
+  animation: 1s ease pulse;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.3);
+    opacity: 0.1;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  70% {
+    transform: scale(1.03);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
 </style>
