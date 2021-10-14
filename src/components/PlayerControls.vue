@@ -496,4 +496,50 @@ export default {
     max-height: 300px;
   }
 }
+
+@media (min-width: 1300px) {
+  .numBtn {
+    //min-width: 50px;
+    width: 25px;
+    height: 25px;
+    font-size: 15px;
+    text-align: center;
+    padding: 2px;
+    margin: 0px;
+    transform: rotate(90deg);
+  }
+  .numField {
+    transform: rotate(-90deg);
+    max-height: 300px;
+    max-width: 300px;
+    overflow: visible;
+    margin: 0px 0px 0px 50px;
+  }
+  .numFieldWrapper {
+    max-height: 300px;
+  }
+}
+
+@media (min-width: 1250px) {
+  .numBtn {
+    //min-width: 50px;
+    width: 25px;
+    height: 25px;
+    font-size: 15px;
+    text-align: center;
+    padding: 2px;
+    margin: 0px;
+    transform: rotate(90deg);
+  }
+  .numField {
+    transform: rotate(-90deg);
+    max-height: 300px;
+    max-width: 300px;
+    overflow: visible;
+    margin: 0px 0px 0px 150px;
+  }
+  .numFieldWrapper {
+    max-height: 300px;
+  }
+}
 </style>
