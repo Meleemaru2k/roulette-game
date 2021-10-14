@@ -520,7 +520,7 @@ export default {
   }
 }
 
-@media (min-width: 1300px) {
+@media (min-width: 2000px) {
   .numBtn {
     //min-width: 50px;
     width: 25px;
