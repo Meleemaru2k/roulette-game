@@ -410,6 +410,18 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.numField {
+  transform: none;
+  max-height: none;
+  max-width: none;
+  overflow: auto;
+  margin: auto;
+  width: 300px;
+}
+.numFieldWrapper {
+  max-height: none;
+}
+
 .numBtn {
   //min-width: 50px;
   width: 25px;
@@ -418,8 +430,9 @@ export default {
   text-align: center;
   padding: 2px;
   margin: 0px;
-  transform: rotate(90deg);
+  transform: none;
 }
+
 .subgridBtn {
   //min-width: 50px;
   width: 25px;
@@ -430,16 +443,6 @@ export default {
   margin: 0px;
   border-radius: 100%;
 }
-.numField {
-  transform: rotate(-90deg);
-  max-height: 300px;
-  max-width: 300px;
-  overflow: visible;
-  margin: 0px 0px 0px 150px;
-}
-.numFieldWrapper {
-  max-height: 300px;
-}
 .numZeroBtn {
   width: 140px;
 }
@@ -447,7 +450,7 @@ export default {
   width: 80px;
 }
 
-@media only screen and (max-width: 600px) {
+@media (min-width: 768px) {
   .numField {
     transform: none;
     max-height: none;
@@ -469,6 +472,28 @@ export default {
     padding: 2px;
     margin: 0px;
     transform: none;
+  }
+}
+@media (min-width: 1025px) {
+  .numBtn {
+    //min-width: 50px;
+    width: 25px;
+    height: 25px;
+    font-size: 15px;
+    text-align: center;
+    padding: 2px;
+    margin: 0px;
+    transform: rotate(90deg);
+  }
+  .numField {
+    transform: rotate(-90deg);
+    max-height: 300px;
+    max-width: 300px;
+    overflow: visible;
+    margin: 0px 0px 0px 150px;
+  }
+  .numFieldWrapper {
+    max-height: 300px;
   }
 }
 </style>
